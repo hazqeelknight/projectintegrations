@@ -19,7 +19,16 @@ import type {
 export const calendarIntegrationsApi = {
   getAll: async (): Promise<CalendarIntegration[]> => {
     const response = await api.get('/integrations/calendar/');
-    return response.data;
+    // Handle paginated response structure
+    if (response.data && Array.isArray(response.data.results)) {
+      return response.data.results;
+    } else if (Array.isArray(response.data)) {
+      // Fallback for non-paginated responses
+      return response.data;
+    } else {
+      console.warn('API returned unexpected data structure for calendar integrations:', response.data);
+      return [];
+    }
   },
 
   getById: async (id: string): Promise<CalendarIntegration> => {
@@ -51,7 +60,16 @@ export const calendarIntegrationsApi = {
 export const videoIntegrationsApi = {
   getAll: async (): Promise<VideoConferenceIntegration[]> => {
     const response = await api.get('/integrations/video/');
-    return response.data;
+    // Handle paginated response structure
+    if (response.data && Array.isArray(response.data.results)) {
+      return response.data.results;
+    } else if (Array.isArray(response.data)) {
+      // Fallback for non-paginated responses
+      return response.data;
+    } else {
+      console.warn('API returned unexpected data structure for video integrations:', response.data);
+      return [];
+    }
   },
 
   getById: async (id: string): Promise<VideoConferenceIntegration> => {
@@ -73,7 +91,16 @@ export const videoIntegrationsApi = {
 export const webhookIntegrationsApi = {
   getAll: async (): Promise<WebhookIntegration[]> => {
     const response = await api.get('/integrations/webhooks/');
-    return response.data;
+    // Handle paginated response structure
+    if (response.data && Array.isArray(response.data.results)) {
+      return response.data.results;
+    } else if (Array.isArray(response.data)) {
+      // Fallback for non-paginated responses
+      return response.data;
+    } else {
+      console.warn('API returned unexpected data structure for webhook integrations:', response.data);
+      return [];
+    }
   },
 
   getById: async (id: string): Promise<WebhookIntegration> => {
@@ -105,7 +132,16 @@ export const webhookIntegrationsApi = {
 export const integrationLogsApi = {
   getAll: async (filters?: Record<string, any>): Promise<IntegrationLog[]> => {
     const response = await api.get('/integrations/logs/', { params: filters });
-    return response.data;
+    // Handle paginated response structure
+    if (response.data && Array.isArray(response.data.results)) {
+      return response.data.results;
+    } else if (Array.isArray(response.data)) {
+      // Fallback for non-paginated responses
+      return response.data;
+    } else {
+      console.warn('API returned unexpected data structure for integration logs:', response.data);
+      return [];
+    }
   },
 };
 
