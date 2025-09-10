@@ -309,18 +309,15 @@ NOTIFICATION_RETRY_DELAY_BASE = config('NOTIFICATION_RETRY_DELAY_BASE', default=
 # Google API Configuration
 GOOGLE_OAUTH_CLIENT_ID = config('GOOGLE_OAUTH_CLIENT_ID', default='')
 GOOGLE_OAUTH_CLIENT_SECRET = config('GOOGLE_OAUTH_CLIENT_SECRET', default='')
-GOOGLE_OAUTH_REDIRECT_URI = config('GOOGLE_OAUTH_REDIRECT_URI', default='http://localhost:8000/api/v1/integrations/oauth/callback/')
 
 # Microsoft Graph API Configuration
 MICROSOFT_CLIENT_ID = config('MICROSOFT_CLIENT_ID', default='')
 MICROSOFT_CLIENT_SECRET = config('MICROSOFT_CLIENT_SECRET', default='')
 MICROSOFT_TENANT_ID = config('MICROSOFT_TENANT_ID', default='common')
-MICROSOFT_REDIRECT_URI = config('MICROSOFT_REDIRECT_URI', default='http://localhost:8000/api/v1/integrations/oauth/callback/')
 
 # Zoom API Configuration
 ZOOM_CLIENT_ID = config('ZOOM_CLIENT_ID', default='')
 ZOOM_CLIENT_SECRET = config('ZOOM_CLIENT_SECRET', default='')
-ZOOM_REDIRECT_URI = config('ZOOM_REDIRECT_URI', default='http://localhost:8000/api/v1/integrations/oauth/callback/')
 
 # Apple Calendar Configuration
 APPLE_CLIENT_ID = config('APPLE_CLIENT_ID', default='')

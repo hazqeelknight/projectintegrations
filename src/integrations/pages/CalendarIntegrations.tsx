@@ -8,16 +8,46 @@ import {
   Tab,
 } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/core';
 import { CalendarIntegrationCard } from '../components/CalendarIntegrationCard';
 import { ConnectIntegrationButton } from '../components/ConnectIntegrationButton';
 import { CalendarConflictsPanel } from '../components/CalendarConflictsPanel';
-import { useCalendarIntegrations } from '../hooks/useIntegrationsApi';
+import { useCalendarIntegrations, useOAuthCallback } from '../hooks/useIntegrationsApi';
 
 const CalendarIntegrations: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { data: integrations = [], isLoading, error } = useCalendarIntegrations();
+  const oauthCallback = useOAuthCallback();
 
+  // Handle OAuth callback
+  React.useEffect(() => {
+    const code = searchParams.get('code');
+    const state = searchParams.get('state');
+    
+    if (code && state) {
+      // Parse state parameter to extract provider and integration type
+      const stateParts = state.split(':');
+      if (stateParts.length >= 3) {
+        const [provider, integrationType] = stateParts;
+        
+        if (integrationType === 'calendar') {
+          // Make authenticated API call to complete OAuth flow
+          oauthCallback.mutate({
+            provider,
+            integration_type: integrationType,
+            code,
+            state,
+          });
+          
+          // Clear URL parameters
+          setSearchParams({});
+        }
+      }
+    }
+  }, [searchParams, setSearchParams, oauthCallback]);
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };

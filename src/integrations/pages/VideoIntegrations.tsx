@@ -8,15 +8,45 @@ import {
   Tab,
 } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/core';
 import { VideoIntegrationCard } from '../components/VideoIntegrationCard';
 import { ConnectIntegrationButton } from '../components/ConnectIntegrationButton';
-import { useVideoIntegrations } from '../hooks/useIntegrationsApi';
+import { useVideoIntegrations, useOAuthCallback } from '../hooks/useIntegrationsApi';
 
 const VideoIntegrations: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { data: integrations = [], isLoading, error } = useVideoIntegrations();
+  const oauthCallback = useOAuthCallback();
 
+  // Handle OAuth callback
+  React.useEffect(() => {
+    const code = searchParams.get('code');
+    const state = searchParams.get('state');
+    
+    if (code && state) {
+      // Parse state parameter to extract provider and integration type
+      const stateParts = state.split(':');
+      if (stateParts.length >= 3) {
+        const [provider, integrationType] = stateParts;
+        
+        if (integrationType === 'video') {
+          // Make authenticated API call to complete OAuth flow
+          oauthCallback.mutate({
+            provider,
+            integration_type: integrationType,
+            code,
+            state,
+          });
+          
+          // Clear URL parameters
+          setSearchParams({});
+        }
+      }
+    }
+  }, [searchParams, setSearchParams, oauthCallback]);
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
