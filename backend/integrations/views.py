@@ -96,7 +96,7 @@ def initiate_oauth(request):
         if provider == 'google':
             auth_url = "https://accounts.google.com/o/oauth2/v2/auth?" + urllib.parse.urlencode({
                 'client_id': settings.GOOGLE_OAUTH_CLIENT_ID,
-                'redirect_uri': settings.GOOGLE_OAUTH_REDIRECT_URI,
+                'redirect_uri': redirect_uri,
                 'scope': ' '.join(scopes),
                 'response_type': 'code',
                 'access_type': 'offline',
@@ -106,7 +106,7 @@ def initiate_oauth(request):
         elif provider == 'outlook':
             auth_url = f"https://login.microsoftonline.com/{settings.MICROSOFT_TENANT_ID}/oauth2/v2.0/authorize?" + urllib.parse.urlencode({
                 'client_id': settings.MICROSOFT_CLIENT_ID,
-                'redirect_uri': settings.MICROSOFT_REDIRECT_URI,
+                'redirect_uri': redirect_uri,
                 'scope': ' '.join(scopes),
                 'response_type': 'code',
                 'state': f"{provider}:{integration_type}:{state}"
@@ -114,7 +114,7 @@ def initiate_oauth(request):
         elif provider == 'zoom':
             auth_url = "https://zoom.us/oauth/authorize?" + urllib.parse.urlencode({
                 'client_id': settings.ZOOM_CLIENT_ID,
-                'redirect_uri': settings.ZOOM_REDIRECT_URI,
+                'redirect_uri': redirect_uri,
                 'response_type': 'code',
                 'state': f"{provider}:{integration_type}:{state}"
             })
